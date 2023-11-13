@@ -40,8 +40,6 @@
     <link rel="stylesheet" href="assets/plugins/leaflet-routing/leaflet-routing-machine.css" />
 
 </head>
-
-
 <style>
     #map {
         height: 100vh;
@@ -154,7 +152,6 @@
         marker2.addTo(map);
         marker2.bindPopup("RS.Akademik UGM");
 
-
         /* Control Layer */
         var baseMaps = {
             "OpenStreetMap": basemap1,
@@ -174,7 +171,7 @@
         L.control.scale({
             maxWidth: 150, position: 'bottomright'
         }).addTo(map);
-        var wfsgeoserver1 = L.geoJson(null, {
+        var wfsgeoserver2 = L.geoJson(null, {
             pointToLayer: function (feature, latlng) {
                 return L.marker(latlng, {
                     // icon: L.icon({
@@ -193,19 +190,17 @@
                     "Provinsi : " + "Daerah Istimewa Yogyakarta";
                 layer.on({
                     click: function (e) { //Fungsi ketika icon simbol di-klik
-                        wfsgeoserver1.bindPopup(content);
+                        wfsgeoserver2.bindPopup(content);
                     },
                     mouseover: function (e) {
-                        wfsgeoserver1.bindTooltip(feature.properties.kecamatan);
+                        wfsgeoserver2.bindTooltip(feature.properties.kecamatan);
                     },
                     mouseout: function (e) {
-                        wfsgeoserver1.closePopup();
+                        wfsgeoserver2.closePopup();
                     }
                 });
             }
         });
-
-
 
         $.getJSON("wfsgeoserver2.php", function (data) {
             var numericalValues = [
@@ -231,7 +226,7 @@
                 }
             });
 
-            var wfsgeoserver1 = L.geoJson(data, {
+            var wfsgeoserver2 = L.geoJson(data, {
                 style: function (feature) {
                     return {
                         fillColor: feature.properties.fillColor || 'gray', // Default to gray if no color
@@ -245,11 +240,9 @@
                 }
             });
 
-            wfsgeoserver1.addTo(map);
-            map.fitBounds(wfsgeoserver1.getBounds());
+            wfsgeoserver2.addTo(map);
+            map.fitBounds(wfsgeoserver2.getBounds());
         });
-
-
 
         /* Image Watermark */
         L.Control.Watermark = L.Control.extend({
@@ -276,7 +269,6 @@
                 return img;
             }
         });
-
         L.control.Legend = function (opts) {
             return new L.Control.Legend(opts);
         }
@@ -286,7 +278,7 @@
         /*Plugin Search */
         var searchControl = new L.Control.Search({
             position: "topleft",
-            layer: wfsgeoserver1, //Nama variabel layer
+            layer: wfsgeoserver2, //Nama variabel layer
             propertyName: "kecamatan", //Field untuk pencarian
             marker: false,
             moveToLocation: function (latlng, title, map) {
@@ -342,6 +334,9 @@
             })
             .addTo(map);
 
+        /*Plugin Mouse Position Coordinate */
+        L.control.mousePosition({ position: "topleft", separator: ",", prefix: "Point Coodinate: " }).addTo(map);
+
         /*Plugin Measurement Tool */
         var measureControl = new L.Control.Measure({
             position: "topleft",
@@ -359,43 +354,39 @@
             title: "Print",
         }).addTo(map);
 
-        /*Plugin Mouse Position Coordinate */
-        L.control.mousePosition({ position: "topleft", separator: ",", prefix: "Point Coodinate: " }).addTo(map);
-
-       // Membuat ikon marker dengan warna kuning
-var yellowIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-});
-
-// Menyesuaikan opsi ikon pada plugin Routing
-L.Routing.control({
-    waypoints: [
-        L.latLng(-7.7969, 110.3715),
-        L.latLng(-7.7969, 110.3715)
-    ],
-    routeWhileDragging: true,
-    createMarker: function(i, waypoint, n) {
-        var marker = L.marker(waypoint.latLng, {
-            draggable: true,
-            icon: yellowIcon  // Menggunakan ikon warna kuning yang telah dibuat
+        // Membuat ikon marker dengan warna kuning
+        var yellowIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
         });
 
-        if (i === 0 || i === n - 1) {
-            marker.bindPopup('Waypoint ' + (i + 1)).openPopup();
-        }
+        // Menyesuaikan opsi ikon pada plugin Routing
+        L.Routing.control({
+            waypoints: [
+                L.latLng(-7.7969, 110.3715),
+                L.latLng(-7.7969, 110.3715)
+            ],
+            routeWhileDragging: true,
+            createMarker: function (i, waypoint, n) {
+                var marker = L.marker(waypoint.latLng, {
+                    draggable: true,
+                    icon: yellowIcon  // Menggunakan ikon warna kuning yang telah dibuat
+                });
 
-        marker.on('dragend', function(event) {
-            // Handle dragend event
-        });
+                if (i === 0 || i === n - 1) {
+                    marker.bindPopup('Waypoint ' + (i + 1)).openPopup();
+                }
 
-        return marker;
-    }
-}).addTo(map);
+                marker.on('dragend', function (event) {
+                    // Handle dragend event
+                });
 
+                return marker;
+            }
+        }).addTo(map);
 
         /*Layer Marker*/
         var addressPoints = [
@@ -429,7 +420,6 @@ L.Routing.control({
             marker.bindPopup(title1);
             markers.addLayer(marker);
         }
-
         map.addLayer(markers);
     </script>
 </body>
