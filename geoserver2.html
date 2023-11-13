@@ -342,11 +342,6 @@
             })
             .addTo(map);
 
-        /*Plugin Mouse Position Coordinate */
-        L.control.mousePosition({ position: "topleft", separator: ",", prefix: "Point Coodinate: " }).addTo(map);
-
-
-
         /*Plugin Measurement Tool */
         var measureControl = new L.Control.Measure({
             position: "topleft",
@@ -363,6 +358,9 @@
         L.easyPrint({
             title: "Print",
         }).addTo(map);
+
+        /*Plugin Mouse Position Coordinate */
+        L.control.mousePosition({ position: "topleft", separator: ",", prefix: "Point Coodinate: " }).addTo(map);
 
        // Membuat ikon marker dengan warna kuning
 var yellowIcon = new L.Icon({
